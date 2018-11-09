@@ -36,7 +36,7 @@
       </div>
        <el-dialog :title="editTitle" :visible.sync="editVisible">
         <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item label="分类名称" prop="name">
+            <el-form-item label="标签名称" prop="name">
               <el-input class="form-input" v-model="form.name"></el-input>
             </el-form-item>
             <!-- <el-form-item label="分类权重" prop="weight">

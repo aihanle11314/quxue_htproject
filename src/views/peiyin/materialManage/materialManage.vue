@@ -13,34 +13,34 @@
 				</el-table-column>
 				<el-table-column align="center" prop="name" label="配音包名称">
 				</el-table-column>
-				<el-table-column align="center" prop="weight" label="配音封面">
+				<el-table-column align="center" prop="cover_img" label="配音封面">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(url0)">查看</el-button>
+										@click="See(scope.row.subtitle_url)">查看</el-button>
 						</template>
 				</el-table-column>
-				<el-table-column align="center" prop="describe" label="配音视频">
+				<el-table-column align="center" prop="video_url" label="配音视频">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(url1)">查看</el-button>
+										@click="See(scope.row.subtitle_url)">查看</el-button>
 						</template>
 				</el-table-column>
-        <el-table-column align="center" prop="is_hide" label="配音字幕">
+        <el-table-column align="center" prop="sound_url" label="配音字幕">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(url2)">查看</el-button>
+										@click="See(scope.row.subtitle_url)">查看</el-button>
 						</template>
         </el-table-column>
-        <el-table-column align="center" prop="is_hide" label="配音音轨">
+        <el-table-column align="center" prop="subtitle_url" label="配音音轨">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(url3)">查看</el-button>
+										@click="See(scope.row.subtitle_url)">查看</el-button>
 						</template>
         </el-table-column>
 				<el-table-column align="center" label="操作">
 						<template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(url3)">查看</el-button>
+										@click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 						</template>
 				</el-table-column>
       </el-table>
@@ -58,17 +58,17 @@
             <el-form-item label="配音包名称" prop="name">
               <el-input class="form-input" placeholder="http://" v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="配音封面URL" prop="name">
-              <el-input class="form-input" placeholder="http://" v-model="form.name"></el-input>
+            <el-form-item label="配音封面URL" prop="cover_img">
+              <el-input class="form-input" placeholder="http://" v-model="form.cover_img"></el-input>
             </el-form-item>
-            <el-form-item label="配音视频URL" prop="name">
-              <el-input class="form-input" placeholder="http://" v-model="form.name"></el-input>
+            <el-form-item label="配音视频URL" prop="video_url">
+              <el-input class="form-input" placeholder="http://" v-model="form.video_url"></el-input>
             </el-form-item>
-            <el-form-item label="配音字幕URL" prop="name">
-              <el-input class="form-input" placeholder="http://" v-model="form.name"></el-input>
+            <el-form-item label="配音字幕URL" prop="sound_url">
+              <el-input class="form-input" placeholder="http://" v-model="form.sound_url"></el-input>
             </el-form-item>
-            <el-form-item label="配音音轨URL" prop="name">
-              <el-input class="form-input" placeholder="http://" v-model="form.name"></el-input>
+            <el-form-item label="配音音轨URL" prop="subtitle_url">
+              <el-input class="form-input" placeholder="http://" v-model="form.subtitle_url"></el-input>
             </el-form-item>
             <el-form-item>
                   <el-button type="primary" @click="onSubmitForm('form')">提交</el-button>
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-
+import {getPymaterialList} from '@/http/api/peiyinRequest'
 export default {
   name: 'pymaterialManage',
   data () {
@@ -97,20 +97,22 @@ export default {
       is_hide: '',
       form: {
         name: '',
-        weight: '',
-        describe: ''
+        cover_img: '',
+        video_url: '',
+        sound_url: '',
+        subtitle_url: ''
       },
     }
   },
-  // created () {
-  //     this.getData()
-  // },
+  created () {
+      this.getData()
+  },
   methods: {
     getData () {
       this.listLoading = true
       let self = this
       return new Promise((resolve, reject) => {//更改字段名！！
-        getPyclassList(this.page, this.cl_name).then(response => {
+        getPymaterialList(this.page, this.a_id, this.a_name).then(response => {
           const dataw = response.data
           self.tableData = dataw.data
         //   self.total_page = dataw.page_total
@@ -140,8 +142,10 @@ export default {
     handleEdit (index, row) {
       this.form['type_id'] = row.id
       this.form.name = row.name //以下各项改成将要显示的字段名
-      this.form.weight = row.weight
-      this.form.describe = row.describe
+      this.form.cover_img = row.cover_img
+      this.form.video_url = row.video_url
+      this.form.sound_url = row.sound_url
+      this.form.subtitle_url = row.subtitle_url
       this.editVisible = true//控制显示
       this.editTitle = '编辑配音'
     },

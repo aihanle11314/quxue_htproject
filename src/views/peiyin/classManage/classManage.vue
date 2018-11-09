@@ -186,13 +186,11 @@ export default {
     },
     hideEdit (index, row) {
       let self = this
-      console.log(this.$store.getters.userId,7888888888)
       if (row.is_hide === 2) {
         row.is_hide = 1
       }else {
         row.is_hide = 2
       }
-      console.log(self.is_hide,700000)
       return new Promise((resolve, reject) => {
         hidepyClass({is_hide:row.is_hide, type_id:row.id}).then(response => {
           if (response) {

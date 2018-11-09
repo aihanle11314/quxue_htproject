@@ -55,7 +55,7 @@ export default {
           { required: true, message: '请选择权重', trigger: 'change' }
         ],
         describe: [
-          { required: true, message: '请填写描述信息', trigger: 'blur' }
+          { required: false, message: '请填写描述信息', trigger: 'blur' }
         ]
       }
     }
@@ -85,7 +85,8 @@ export default {
               this.submitloading = false
               if (response) {
                   this.$message.success('添加提交成功！')
-                  this.$router.push({name: 'classManage'})
+                  this.$router.back(-1)
+                  this.editVisible = true
               }
               resolve()
             }).catch(error => {
@@ -99,7 +100,7 @@ export default {
         }
       })
     }
-  } 
+  }
 }
 </script>
 <style rel="stylesheet/scss" lang="scss">
