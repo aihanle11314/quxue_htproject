@@ -103,10 +103,13 @@ export default {
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" scoped>
 .appbanner-container {
   margin: 0;
   padding: 0;
+  form{
+    width: auto;
+  }
   .box-header {
     position: relative;
     height: 60px;

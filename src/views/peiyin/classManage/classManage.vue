@@ -238,7 +238,7 @@ export default {
 }
 //实现路由页参考 机构班级页
 </script>
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" scoped>
 .appbanner-container {
   margin: 0;
   padding: 0;

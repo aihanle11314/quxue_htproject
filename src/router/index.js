@@ -313,19 +313,19 @@ export const asyncRouterMap = [
         name: 'pycl',
         // component: _import('peiyin/classManage/classManage'),
         component: _import('subRouter'),
-        meta: { title: '分类管理', icon: 'subnavCourse', role: ['admin'] },
+        meta: { title: '分类管理', icon: 'subnavCourse', role: ['admin'], keepAlive: false },
         children: [
           {
             path: 'classManage',
             name: 'classManage',
             component: _import('peiyin/classManage/classManage'),
-            meta: { title: '管理首页', role: ['admin'] }
+            meta: { title: '管理首页', role: ['admin'], keepAlive: false }
           },
           {
             path: 'addClass',
             name: 'addClass',
             component: _import('peiyin/classManage/addClass'),
-            meta: { title: '新增分类', role: ['admin'] }
+            meta: { title: '新增分类', role: ['admin'], keepAlive: true }
           }
           // {
           //   path: 'editClass',

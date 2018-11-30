@@ -68,6 +68,8 @@
                 {{getProductName1(scope.row.tags_str)}}
               </template>
 				</el-table-column>
+        <!-- <el-table-column v-if="isdes" align="center" prop="describe" label="配音描述">
+				</el-table-column> -->
 				<!-- <el-table-column align="center" prop="reco" label="推荐">
 				</el-table-column> -->
         <el-table-column align="center" prop="is_recommend" label="推荐">
@@ -95,7 +97,7 @@
 						</template>
 				</el-table-column>
 		</el-table>
-        <div v-show="!listLoading" class="pagination">
+    <div v-show="!listLoading" class="pagination">
 			<el-pagination
 						background
 						@current-change ="handleCurrentChange"
@@ -146,7 +148,7 @@
               <el-button class="opcolor1" type="primary" @click="addPylabel">添加标签</el-button>
           </el-form-item>
           <el-form-item label="配音描述" prop="describe">
-            <el-input type="textarea" :rows="2" placeholder="请输入内容" class="form-input" v-model="form.describe"></el-input>
+            <el-input type="textarea" :rows="2" placeholder="请输入内容" class="form-input" v-model="form1.describe"></el-input>
           </el-form-item>
           <el-form-item label="点击量" prop="hits">
               <el-input class="form-input" v-model="form1.hits"></el-input>
@@ -175,6 +177,48 @@
                 <el-button type="primary" @click="onSubmitForm('form1')">提交</el-button>
             </el-form-item>
         </el-form>
+        <div class="dialog_in">
+          <el-dialog class="dialog_in" title="添加分类" :visible.sync="addeditVisible"
+        append-to-body>
+          <el-form ref="adclassform" :inline="true" :model="adclassform" :rules="adclassrules" label-width="120px">
+           <el-form-item label="分类名称" prop="name">
+            <el-input class="form-input1" v-model="adclassform.name"></el-input>
+          </el-form-item>
+          <el-form-item label="分类权重" prop="weight">
+              <el-select v-model="adclassform.weight" placeholder="请选择">
+                  <!-- <el-option v-for="item in jgList" :key="item.id" :label="item.o_name" :value="item.id">
+                  </el-option> -->
+                  <el-option label="1" value="1"></el-option>
+                  <el-option label="2" value="2"></el-option>
+                  <el-option label="3" value="3"></el-option>
+                  <el-option label="4" value="4"></el-option>
+                  <el-option label="5" value="5"></el-option>
+                  <el-option label="6" value="6"></el-option>
+                  <el-option label="7" value="7"></el-option>
+                  <el-option label="8" value="8"></el-option>
+                </el-select>
+          </el-form-item>
+          <el-form-item label="分类描述" prop="describe">
+            <el-input type="textarea" :rows="2" placeholder="请输入内容" class="form-input" v-model="adclassform.describe"></el-input>
+          </el-form-item>
+           <el-form-item>
+                <el-button class="subton" type="primary" :loading="submitloading" @click="onSubmitadclassForm('adclassform')">提交</el-button>
+            </el-form-item>
+        </el-form>
+        </el-dialog>
+        </div>
+        
+        <el-dialog title="添加标签" :visible.sync="addeditVisibles"
+        append-to-body>
+          <el-form ref="adlabelform" :model="adlabelform" :rules="adlabelrules" label-width="120px">
+           <el-form-item label="标签名称" prop="name">
+            <el-input class="form-input" v-model="adlabelform.name"></el-input>
+          </el-form-item>
+           <el-form-item>
+                <el-button class="subton1" type="primary" :loading="submitloading" @click="onSubmitadlabelForm('adlabelform')">提交</el-button>
+            </el-form-item>
+        </el-form>
+        </el-dialog>
       </el-dialog>
     </div>
 </template>
@@ -183,40 +227,41 @@
 import request from '@/http/request'
 import { getToken } from '@/utils/auth'
 import ElDragSelect from '@/components/DragSelect'
-import {getPeiyinList, deletepeiyin, getpeiyinType, getpeiyinLabel, operateTop, hidePeiyin, editPy, operateRecommend} from '@/http/api/peiyinRequest'
+import {getPeiyinList, deletepeiyin, getpeiyinType, getpeiyinLabel, operateTop, hidePeiyin, editPy, operateRecommend, updateClass, updateLabel} from '@/http/api/peiyinRequest'
 import { log } from 'util';
 export default {
+  inject: ['reload'],
   name: 'pyindex',
   components: { ElDragSelect },
   data () {
-    var checkhits = (rule, value, callback) => {
-      if(value === 0) {
-        return callback(new Error('请输入点击量'))
-      } else {
-        callback()
-      }
-    };
-    var checkplays = (rule, value, callback) => {
-      if(value === 0) {
-        return callback(new Error('请输入播放量'))
-      } else {
-        callback()
-      }
-    };
-    var checkdubs = (rule, value, callback) => {
-      if(value === 0) {
-        return callback(new Error('请输入配音量'))
-      } else {
-        callback()
-      }
-    };
-    var checkshares = (rule, value, callback) => {
-      if(value === 0) {
-        return callback(new Error('请输入分享量'))
-      } else {
-        callback()
-      }
-    };
+    // var checkhits = (rule, value, callback) => {
+    //   if(value === 0) {
+    //     return callback(new Error('请输入点击量'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
+    // var checkplays = (rule, value, callback) => {
+    //   if(value === 0) {
+    //     return callback(new Error('请输入播放量'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
+    // var checkdubs = (rule, value, callback) => {
+    //   if(value === 0) {
+    //     return callback(new Error('请输入配音量'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
+    // var checkshares = (rule, value, callback) => {
+    //   if(value === 0) {
+    //     return callback(new Error('请输入分享量'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
     var checklikes= (rule, value, callback) => {
       if(value === 0) {
         return callback(new Error('请输入点赞量'))
@@ -225,6 +270,7 @@ export default {
       }
     };
     return {
+      isdes:false,
       listLoading: false,
       uploadLoading: false,
       is_hide: '',
@@ -249,6 +295,30 @@ export default {
       form: {
         filelist:[],
       },
+      adclassform: {
+        name: '',
+        describe: '',
+        weight: 1,
+      },
+      adlabelform: {
+        name: ''
+      },
+      adlabelrules: {
+        name: [
+          { required: true, message: '请填写标签名称', trigger: 'blur' }
+        ]
+      },
+      adclassrules: {
+        name: [
+          { required: true, message: '请填写分类名称', trigger: 'blur' }
+        ],
+        weight: [
+          { required: true, message: '请选择权重', trigger: 'change' }
+        ],
+        describe: [
+          { required: false, message: '请填写描述信息', trigger: 'blur' }
+        ]
+      },
       rules: {
         title: [
           { required: true, message: '输入配音标题', trigger: 'blur' }
@@ -259,27 +329,27 @@ export default {
         // tags_id: [
         //   { required: true, message: '请选择配音标签', trigger: 'change' }
         // ],
-        hits: [
-          { required: true, validator: checkhits, trigger: 'blur' }
-        ],
-        plays: [
-          { required: true, message: '输入播放量', trigger: 'blur' }
-        ],
-        dubs: [
-          { required: true, message: '输入配音量', trigger: 'blur' }
-        ],
-        shares: [
-          { required: true, message: '输入分享量', trigger: 'blur' }
-        ],
-        likes: [
-          { required: true, message: '输入点赞量', trigger: 'blur' }
-        ],
-        is_top: [
-          { required: true, message: '选择是否置顶', trigger: 'change' }
-        ],
-        is_recommend: [
-          { required: true, message: '选择是否推荐', trigger: 'change' }
-        ]
+        // hits: [
+        //   { required: true, validator: checkhits, trigger: 'blur' }
+        // ],
+        // plays: [
+        //   { required: true, message: '输入播放量', trigger: 'blur' }
+        // ],
+        // dubs: [
+        //   { required: true, message: '输入配音量', trigger: 'blur' }
+        // ],
+        // shares: [
+        //   { required: true, message: '输入分享量', trigger: 'blur' }
+        // ],
+        // likes: [
+        //   { required: true, message: '输入点赞量', trigger: 'blur' }
+        // ],
+        // is_top: [
+        //   { required: true, message: '选择是否置顶', trigger: 'change' }
+        // ],
+        // is_recommend: [
+        //   { required: true, message: '选择是否推荐', trigger: 'change' }
+        // ]
       },
       form1: {
         // tags_id: [],
@@ -298,6 +368,9 @@ export default {
       dialogTitle: '',
       editVisible: false,
       editTitle: '',
+      addeditVisible: false,
+      addeditVisibles: false,
+      submitloading: false,
       fileList: [],
     }
   },
@@ -339,6 +412,8 @@ export default {
       })
     },
     search () {
+      let that = this
+      that.page = 1
       this.getData()
     },
     getProductName (project) {
@@ -435,6 +510,7 @@ export default {
         operateTop({base_id:pid, is_top:self.is_top}).then(response => {
           if (response) {
             this.getData()
+            this.$message.success('取消置顶成功！')
           }
           resolve()
         }).catch(error => {
@@ -457,7 +533,8 @@ export default {
       return new Promise((resolve, reject) => {
         operateTop({base_id:pid, is_top:self.is_top}).then(response => {
           if (response) {
-            this.$router.go(0)
+            this.reload()
+            this.$message.success('设置置顶成功！')
           }
           resolve()
         }).catch(error => {
@@ -481,6 +558,7 @@ export default {
         operateRecommend({base_id:pid, is_recommend:self.is_recommend}).then(response => {
           if (response) {
             this.getData()
+            this.$message.success('取消推荐成功！')
           }
           resolve()
         }).catch(error => {
@@ -503,7 +581,8 @@ export default {
       return new Promise((resolve, reject) => {
         operateRecommend({base_id:pid, is_recommend:self.is_recommend}).then(response => {
           if (response) {
-            this.$router.go(0)
+            this.reload()
+            this.$message.success('设置推荐成功！')
           }
           resolve()
         }).catch(error => {
@@ -583,7 +662,7 @@ export default {
       this.uploadfileList = fileList
     },
         lookMoreKejian () {
-        window.open(url) //模板下载地址
+        window.open('http://101.201.152.181:9011/Common/upload/moban.xls') //模板下载地址
     },
     onSubmitform(formName) {
           this.uploadLoading = true
@@ -631,10 +710,18 @@ export default {
       })
     },
     handleEdit (index, row) {
+      let self = this
+      console.log(self.tableData,333333333)
       this.form1['base_id'] = row.id
+      console.log(row.id,4444444)
       this.form1.title = row.title //以下各项改成将要显示的字段名
       this.type_id = row.type_str
-      this.form1.describe = row.describe
+      for(let i=0; i<self.tableData.length;++i){
+        if(row.id === self.tableData[i].id){
+          this.form1.describe = self.tableData[i].describe
+        }
+      }
+      // this.form1.describe = self.tableData[0].describe
       this.tags_id = row.tags_str
       this.form1.hits = row.hits.replace(/^\d*\//,'')
       this.form1.plays = row.plays.replace(/^\d*\//,'')
@@ -649,10 +736,20 @@ export default {
       // console.log(this.tags_id,22222222)
     },
     addPyclass () {
-      this.$router.push({name: 'addClass'})
+      // this.$router.push({name: 'addClass'})
+      this.addeditVisible = true
+      this.adclassform= {
+        name: '',
+        describe: '',
+        weight: 1,
+      }
     },
     addPylabel () {
-      this.$router.push({name: 'addLabel'})
+      // this.$router.push({name: 'addLabel'})
+      this.addeditVisibles = true
+      this.adlabelform= {
+        name: ''
+      }
     },
     handleClose(index) {
       var that = this
@@ -684,11 +781,59 @@ export default {
           return false
         }
       })
+    },
+    onSubmitadclassForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.submitloading = true
+          return new Promise((resolve, reject) => {
+            updateClass(this.adclassform).then(response => {
+              this.submitloading = false
+              if (response) {
+                
+                this.addeditVisible = false
+                this.getPYTypeList()
+              }
+              resolve()
+            }).catch(error => {
+              this.submitloading = false
+              reject(error)
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    onSubmitadlabelForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.submitloading = true
+          return new Promise((resolve, reject) => {
+            updateLabel(this.adlabelform).then(response => {
+              this.submitloading = false
+              if (response) {
+                
+                this.addeditVisibles = false
+                this.getPYLabeleList()
+              }
+              resolve()
+            }).catch(error => {
+              this.submitloading = false
+              reject(error)
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" scoped>
 .appbanner-container {
   margin: 0;
   padding: 0;
@@ -739,6 +884,11 @@ export default {
     left: 900px;
     }
   }
+  .dialog_in{
+    margin: 0;
+    padding: 0; 
+    text-align: center;
+  }
   .opcolor{
     background-color: rgba(64,158,255,.1)!important;
   }
@@ -747,3 +897,12 @@ export default {
   }
 }
 </style>
+<style type="text/css">
+  .subton{
+    margin-left: 140px;
+  }
+  .subton1{
+    margin-left: 200px;
+  }
+</style>
+

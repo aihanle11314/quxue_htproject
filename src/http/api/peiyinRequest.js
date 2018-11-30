@@ -217,4 +217,16 @@ export function getPymaterialList (page, base_id, name) {
     method: 'get',
     params: {uid, page, base_id, name}
   })
+}editpyMate
+// 编辑配音素材
+export function editpyMate (param) {
+  let usid = store.getters.userId
+  param['uid'] = usid
+  param = Qs.stringify(param)
+  console.log(param)
+  return request({
+    url: '/Dubs/editbags', // url
+    method: 'post',
+    data: param
+  })
 }

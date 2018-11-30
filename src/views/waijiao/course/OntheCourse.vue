@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import { getCourseList, updateCourse, delCourse, addCourse, getClassList, getTeacherList, getCourseWareList } from '@/http/api/waijiaoRequest'
+import { getCourseList, updateCourse, delCourse, addCourse, getClassListOne, getTeacherList, getCourseWareList } from '@/http/api/waijiaoRequest'
 import { getJGList } from '@/http/api/jigouRequest'
 export default {
   name: 'OntheCourse',
@@ -262,7 +262,7 @@ export default {
     getClasses (oName) {
       let self = this
       return new Promise((resolve, reject) => {
-        getClassList(oName, '', '', '', '', 1, '').then(response => {
+        getClassListOne(oName).then(response => {
           const dataw = response.data
           self.classlist = dataw.data
           resolve()

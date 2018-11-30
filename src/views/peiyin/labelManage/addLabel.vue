@@ -1,27 +1,10 @@
 <template>
   <div class="appbanner-container">
     <div class="box-header">
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-           <el-form-item label="分类名称" prop="name">
+      <el-form :model="form" :rules="rules" label-width="120px">
+           <el-form-item label="标签名称" prop="name">
             <el-input class="form-input" v-model="form.name"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="分类权重" prop="weight">
-              <el-select v-model="form.weight" placeholder="请选择">
-                  <el-option v-for="item in jgList" :key="item.id" :label="item.o_name" :value="item.id">
-                  </el-option>
-                  <el-option label="1" value="1"></el-option>
-                  <el-option label="2" value="2"></el-option>
-                  <el-option label="3" value="3"></el-option>
-                  <el-option label="4" value="4"></el-option>
-                  <el-option label="5" value="5"></el-option>
-                  <el-option label="6" value="6"></el-option>
-                  <el-option label="7" value="7"></el-option>
-                  <el-option label="8" value="8"></el-option>
-                </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item label="分类描述" prop="describe">
-            <el-input type="textarea" :rows="2" placeholder="请输入内容" class="form-input" v-model="form.describe"></el-input>
-          </el-form-item> -->
            <el-form-item>
                 <el-button type="primary" :loading="submitloading" @click="onSubmitForm('form')">提交</el-button>
             </el-form-item>
@@ -100,10 +83,13 @@ export default {
   } 
 }
 </script>
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" scoped>
 .appbanner-container {
   margin: 0;
   padding: 0;
+  form {
+    width: auto;
+  }
   .box-header {
     position: relative;
     height: 60px;

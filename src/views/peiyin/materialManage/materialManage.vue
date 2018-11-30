@@ -16,25 +16,25 @@
 				<el-table-column align="center" prop="cover_img" label="配音封面">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(scope.row.subtitle_url)">查看</el-button>
+										@click="See(scope.row.cover_img)">查看</el-button>
 						</template>
 				</el-table-column>
 				<el-table-column align="center" prop="video_url" label="配音视频">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(scope.row.subtitle_url)">查看</el-button>
+										@click="See(scope.row.video_url)">查看</el-button>
 						</template>
 				</el-table-column>
-        <el-table-column align="center" prop="sound_url" label="配音字幕">
+        <el-table-column align="center" prop="subtitle_url" label="配音字幕">
           <template slot-scope="scope">
                 <el-button size="mini" 
 										@click="See(scope.row.subtitle_url)">查看</el-button>
 						</template>
         </el-table-column>
-        <el-table-column align="center" prop="subtitle_url" label="配音音轨">
+        <el-table-column align="center" prop="sound_url" label="配音音轨">
           <template slot-scope="scope">
                 <el-button size="mini" 
-										@click="See(scope.row.subtitle_url)">查看</el-button>
+										@click="See(scope.row.sound_url)">查看</el-button>
 						</template>
         </el-table-column>
 				<el-table-column align="center" label="操作">
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import {getPymaterialList} from '@/http/api/peiyinRequest'
+import {getPymaterialList, editpyMate} from '@/http/api/peiyinRequest'
 export default {
   name: 'pymaterialManage',
   data () {
@@ -129,7 +129,8 @@ export default {
       this.getData()
     },
     See (e) {
-        window.location.href = e
+        // window.location.href = e
+        window.open(e,"_blank")
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -140,7 +141,7 @@ export default {
       this.getData()
     },
     handleEdit (index, row) {
-      this.form['type_id'] = row.id
+      this.form['base_id'] = row.id
       this.form.name = row.name //以下各项改成将要显示的字段名
       this.form.cover_img = row.cover_img
       this.form.video_url = row.video_url
@@ -154,7 +155,7 @@ export default {
         if (valid) {
           this.editVisible = true
             return new Promise((resolve, reject) => {
-              editpyClass(this.form).then(response => {
+              editpyMate(this.form).then(response => {
                 if (response) {
                   this.editVisible = false
                   this.getData()
