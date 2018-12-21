@@ -3,7 +3,7 @@
       <el-dialog :title="dialogTitle" :visible.sync="dialogVisible">
         <el-form ref="form" :model="form" :rules="rules" label-width="120px">
            <el-form-item label="机构" prop="oid">
-              <el-select v-model="form.oid" filterable placeholder="请选择" class="form-input" :disabled="form.id?true:false">
+              <el-select v-model="form.oid" placeholder="请选择" class="form-input" :disabled="form.id?true:false">
                   <el-option v-for="item in jgList" :key="item.id" :label="item.o_name" :value="item.id">
                   </el-option>
               </el-select>

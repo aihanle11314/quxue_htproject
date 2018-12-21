@@ -149,7 +149,7 @@ export default {
       this.form['id'] = row.id
       this.form.username = row.username
       this.form.r_id = row.role
-      this.dialogVisible = true//控制显示
+      this.dialogVisible = true
       this.dialogTitle = '编辑账号'
     },
     confirmDelete (index, row) {

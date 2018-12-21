@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import router from './router'
 import store from './store'
 
 import ElementUI from 'element-ui'
@@ -14,7 +15,6 @@ import '@/styles/index.scss' // global css
 import './icons' // icon
 import '@/permission' // permission control
 import '@/utils/filters'
-import router from './router'
 
 // Vue.use(ElementUI, { locale })
 Vue.use(ElementUI)

@@ -107,15 +107,6 @@ export function getClassList (oName, cName, cType, courseType, enNme, status, pa
     params: { uid, o_name: oName, c_name: cName, class_format: cType, c_type: courseType, en_t_name: enNme, status, page }
   })
 }
-//待上课程班级列表
-export function getClassListOne (oName) {
-  let uid = store.getters.userId
-  return request({
-    url: '/Classes/classall',
-    method: 'get',
-    params: { uid, o_name: oName}
-  })
-}
 // 添加班级
 export function addOrgClass (param) {
   let uid = store.getters.userId
